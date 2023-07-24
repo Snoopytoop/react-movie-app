@@ -2,34 +2,25 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Search() {
-  const [movies, setMovies] = useState([]);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState();
-  const [nextPage, setNextPage] = useState();
+function Search({
+  movies,
+  setMovies,
+  fetchMoviesInitial,
+  loading,
+  search,
+  setSearch,
+  displayBtn,
+  setDisplayBtn,
+  nextPage,
+  setNextPage,
+  page,
+  setPage,
+  fetchNextPage,
+  searchButtonEnter
+}) {
   const [height, setHeight] = useState(0);
   const [scroll, setScroll] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [loadingBottom, setLoadingBottom] = useState(false);
-  const [displayBtn, setDisplayBtn] = useState(true);
-
-  async function fetchMoviesInitial(search, page) {
-    try {
-      setLoading(true);
-      const {
-        data: { Search },
-      } = await axios.get(
-        `https://www.omdbapi.com/?apikey=da79f3d4&s=${search}&page=${page}`
-      );
-      setLoading(false);
-      setMovies(Search);
-      fetchNextPage(search, page);
-      setDisplayBtn(true);
-    } catch (error) {
-      console.error("error fetching data:", error);
-      setLoading(false);
-    }
-  }
 
   async function fetchMovies(search, page) {
     try {
@@ -39,22 +30,15 @@ function Search() {
       } = await axios.get(
         `https://www.omdbapi.com/?apikey=da79f3d4&s=${search}&page=${page}`
       );
-      setLoadingBottom(false);
-      setMovies((prevMovies) => [...prevMovies, ...Search]);
-      fetchNextPage(search, page);
+      if (Search) {
+        setLoadingBottom(false);
+        setMovies((prevMovies) => [...prevMovies, ...Search]);
+        fetchNextPage(search, page);
+      }
     } catch (error) {
       console.error("error fetching data:", error);
       setLoadingBottom(false);
     }
-  }
-
-  async function fetchNextPage(search, page) {
-    const {
-      data: { Search },
-    } = await axios.get(
-      `https://www.omdbapi.com/?apikey=da79f3d4&s=${search}&page=${page + 1}`
-    );
-    setNextPage(Search);
   }
 
   useEffect(() => {
@@ -81,10 +65,14 @@ function Search() {
     setPage(page + 1);
     fetchMovies(search, page + 1);
     setDisplayBtn(false);
+    console.log(nextPage);
   }
 
   return (
     <div>
+      <Link to="/">
+        <h1>Go back</h1>
+      </Link>
       <input
         type="text"
         placeholder="search for a movie"
@@ -92,12 +80,12 @@ function Search() {
           setSearch(event.target.value);
         }}
         onKeyPress={(event) => {
-            if (event.key === "Enter") {
-                fetchMoviesInitial(search, 1)
-            }
+          if (event.key === "Enter") {
+            searchButtonEnter();
+          }
         }}
       />
-      <button onClick={() => fetchMoviesInitial(search, 1)}>Search</button>
+      <button onClick={() => searchButtonEnter()}>Search</button>
       <div>
         {loading ? (
           <h1>Loading...</h1>
