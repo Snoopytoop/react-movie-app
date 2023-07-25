@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Nav() {
   return (
-    <div className="row">
+    <div className="row nav__row">
       <nav>
         <Link to="/">
           <h3 className="nav__logo">MovieSearch</h3>

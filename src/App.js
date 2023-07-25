@@ -9,7 +9,7 @@ import Nav from "./components/Nav";
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [displayBtn, setDisplayBtn] = useState(true);

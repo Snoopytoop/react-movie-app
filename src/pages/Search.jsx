@@ -16,7 +16,7 @@ function Search({
   page,
   setPage,
   fetchNextPage,
-  searchButtonEnter
+  searchButtonEnter,
 }) {
   const [height, setHeight] = useState(0);
   const [scroll, setScroll] = useState(0);
@@ -93,6 +93,8 @@ function Search({
           <h1>
             Couldn't find what you were looking for. Please try another title.
           </h1>
+        ) : search === null ? (
+          <></>
         ) : (
           movies.map((movie, index) => (
             <Link to={movie.imdbID} key={index}>
