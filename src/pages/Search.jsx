@@ -70,9 +70,8 @@ function Search({
 
   return (
     <div>
-      <Link to="/">
-        <h1>Go back</h1>
-      </Link>
+     
+      <div className="search__container">
       <input
         type="text"
         placeholder="search for a movie"
@@ -86,6 +85,8 @@ function Search({
         }}
       />
       <button onClick={() => searchButtonEnter()}>Search</button>
+
+      </div>
       <div>
         {loading ? (
           <h1>Loading...</h1>
@@ -117,7 +118,7 @@ function Search({
           ))
         )}
         {loadingBottom ? <h1>Loading...</h1> : <></>}
-        {nextPage && displayBtn ? (
+        {nextPage && displayBtn && search === "" ? (
           <button
             onClick={() => loadMoreButton()}
             style={{ margin: "0 0 32px 0" }}
