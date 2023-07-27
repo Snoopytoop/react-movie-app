@@ -1,18 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
+import Loading from "../components/Loading";
 
 function Search({
   movies,
   setMovies,
-  fetchMoviesInitial,
   loading,
   search,
   setSearch,
   displayBtn,
   setDisplayBtn,
   nextPage,
-  setNextPage,
   page,
   setPage,
   fetchNextPage,
@@ -56,7 +56,7 @@ function Search({
   }, []);
 
   useEffect(() => {
-    if (height - scroll <= 200 && nextPage && !displayBtn) {
+    if (height - scroll <= 200 && nextPage) {
       loadMoreButton();
     }
   }, [height, scroll]);
@@ -64,32 +64,27 @@ function Search({
   function loadMoreButton() {
     setPage(page + 1);
     fetchMovies(search, page + 1);
-    setDisplayBtn(false);
     console.log(nextPage);
   }
 
   return (
-    <div>
-     
-      <div className="search__container">
-      <input
-        type="text"
-        placeholder="search for a movie"
-        onChange={(event) => {
-          setSearch(event.target.value);
-        }}
-        onKeyPress={(event) => {
-          if (event.key === "Enter") {
-            searchButtonEnter();
-          }
-        }}
-      />
-      <button onClick={() => searchButtonEnter()}>Search</button>
+    <div className="row">
+      <section className="search__section">
+        <div className="search__header">
+          <h1 className="search__h1">Search</h1>
+          <p>Search for a movie, series or TV show.</p>
+        </div>
 
-      </div>
-      <div>
+        <SearchBar
+          setSearch={setSearch}
+          searchButtonEnter={searchButtonEnter}
+          style="search__container search__container--search"
+        />
+
         {loading ? (
-          <h1>Loading...</h1>
+          <div className="search__movie-cards">
+            <Loading />
+          </div>
         ) : movies === undefined ? (
           <h1>
             Couldn't find what you were looking for. Please try another title.
@@ -97,38 +92,45 @@ function Search({
         ) : search === null ? (
           <></>
         ) : (
-          movies.map((movie, index) => (
-            <Link to={movie.imdbID} key={index}>
-              <div
-                className="movie-card"
-                style={{
-                  margin: "16px",
-                  border: "2px solid black",
-                  width: "30%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <h2>{movie.Title}</h2>
-                <h3>{movie.Year}</h3>
+          <div className="search__movie-cards">
+            {movies.map((movie, index) => (
+              <div className="search__movie-card-outer" key={index}>
+                <div className="search__movie-card-inner">
+                  <Link
+                    to={movie.imdbID}
+                    className="search__movie-card-poster"
+                    style={
+                      movie.Poster === "N/A"
+                        ? 
+                        { backgroundColor: "gray" }
+                        :
+                        { backgroundImage: `url(${movie.Poster})` }
+                    }
+                  >
+                    {movie.Poster === "N/A" ? (
+                      <>
+                        <h2>{movie.Title}</h2>
+                        <h3>{movie.Year}</h3>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </Link>
+                  <div className="search__movie-card--text">
+                    <Link to={movie.imdbID}>
+                      <h2>{movie.Title}</h2>
+                    </Link>
+                    <Link to={movie.imdbID}>
+                      <h3>{movie.Year}</h3>
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </Link>
-          ))
+            ))}
+            {loadingBottom ? <Loading /> : <></>}
+          </div>
         )}
-        {loadingBottom ? <h1>Loading...</h1> : <></>}
-        {nextPage && displayBtn && search === "" ? (
-          <button
-            onClick={() => loadMoreButton()}
-            style={{ margin: "0 0 32px 0" }}
-          >
-            Load more
-          </button>
-        ) : (
-          <></>
-        )}
-      </div>
+      </section>
     </div>
   );
 }

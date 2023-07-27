@@ -12,7 +12,7 @@ function App() {
   const [search, setSearch] = useState(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [displayBtn, setDisplayBtn] = useState(true);
+  const [displayBtn, setDisplayBtn] = useState(false);
   const [nextPage, setNextPage] = useState();
 
   async function fetchMoviesInitial(search) {
@@ -24,7 +24,9 @@ function App() {
         `https://www.omdbapi.com/?apikey=da79f3d4&s=${search}`
       );
       setLoading(false);
-      setMovies(Search);
+      if (search !== null) {
+        setMovies(Search);
+      }
     } catch (error) {
       console.error("error fetching data:", error);
       setLoading(false);
@@ -44,6 +46,8 @@ function App() {
     fetchMoviesInitial(search);
     fetchNextPage(search, page);
     setDisplayBtn(true);
+    console.log(search);
+    console.log(movies)
   }
 
   return (
