@@ -96,32 +96,21 @@ function Search({
             {movies.map((movie, index) => (
               <div className="search__movie-card-outer" key={index}>
                 <div className="search__movie-card-inner">
-                  <Link
-                    to={movie.imdbID}
-                    className="search__movie-card-poster"
-                    style={
-                      movie.Poster === "N/A"
-                        ? 
-                        { backgroundColor: "gray" }
-                        :
-                        { backgroundImage: `url(${movie.Poster})` }
-                    }
-                  >
-                    {movie.Poster === "N/A" ? (
-                      <>
-                        <h2>{movie.Title}</h2>
-                        <h3>{movie.Year}</h3>
-                      </>
-                    ) : (
-                      <></>
-                    )}
+                  <Link to={movie.imdbID} className="search__movie-card-poster">
+                    <h2>{movie.Title}</h2>
+                    <h3>{movie.Year}</h3>
+                    <div className="search__movie-card-poster--img" style={{backgroundImage: `url(${movie.Poster})`}}></div>
                   </Link>
                   <div className="search__movie-card--text">
                     <Link to={movie.imdbID}>
-                      <h2>{movie.Title}</h2>
+                      <h2 className="search__movie-card--title">
+                        {movie.Title}
+                      </h2>
                     </Link>
                     <Link to={movie.imdbID}>
-                      <h3>{movie.Year}</h3>
+                      <h3 className="search__movie-card--title">
+                        {movie.Year}
+                      </h3>
                     </Link>
                   </div>
                 </div>

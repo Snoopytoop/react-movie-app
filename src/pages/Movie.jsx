@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Rating from "../components/Rating";
 
 function Movie() {
   const { movie } = useParams();
@@ -27,20 +28,61 @@ function Movie() {
     fetchMovies();
   }, []);
 
+
   return (
-    <div>
-      <Link to="/search">
-        <h1>Go back</h1>
-      </Link>
+    <>
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        <div>
-          <h1>{film.Title}</h1>
-          <p>{film.Plot}</p>
-        </div>
+        <section className="movie__section">
+          <div className="movie__img--wrapper">
+            <img src={film.Poster} alt="" className="movie__img" />
+          </div>
+          <div className="movie__text--wrapper">
+            <h1>{film.Title}</h1>
+            <p className="movie__text--para">{film.Plot}</p>
+            <ul>
+              <li className="movie__text--li">
+                <p className="movie__text--li-para">
+                  <span className="bold">Relase date: </span>
+                  {film.Released}
+                </p>
+              </li>
+              <li className="movie__text--li">
+                <p className="movie__text--li-para">
+                  <span className="bold">Languages: </span>
+                  {film.Language}
+                </p>
+              </li>
+              <li className="movie__text--li">
+                <p className="movie__text--li-para">
+                  <span className="bold">Genres: </span>
+                  {film.Genre}
+                </p>
+              </li>
+              <li className="movie__text--li">
+                <p className="movie__text--li-para">
+                  <span className="bold">Actors: </span>
+                  {film.Actors}
+                </p>
+              </li>
+              <li className="movie__text--li">
+                <p className="movie__text--li-para">
+                  <span className="bold">Runtime: </span>
+                  {film.Runtime}
+                </p>
+              </li>
+              <li className="movie__text--li">
+                <p className="movie__text--li-para">
+                  <span className="bold">IMDB Rating: </span>
+                  <Rating film={film} />
+                </p>
+              </li>
+            </ul>
+          </div>
+        </section>
       )}
-    </div>
+    </>
   );
 }
 

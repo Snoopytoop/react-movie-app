@@ -47,8 +47,10 @@ function App() {
     fetchNextPage(search, page);
     setDisplayBtn(true);
     console.log(search);
-    console.log(movies)
+    console.log(movies);
   }
+
+  
 
   return (
     <Router>

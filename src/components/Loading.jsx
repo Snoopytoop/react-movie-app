@@ -4,7 +4,7 @@ function Loading() {
   return (
     <>
        { new Array(10).fill(0).map((_, index) => (
-                <div className="search__movie-card-outer">
+                <div className="search__movie-card-outer" key={index}>
                   <div className="search__movie-card-inner">
                     <div
                       className="search__movie-card-poster"
