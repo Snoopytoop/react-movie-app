@@ -1,13 +1,16 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Rating from "../components/Rating";
 
 function Movie() {
   const { movie } = useParams();
 
   const [film, setFilm] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState([]);
+  const [extra, setExtra] = useState([])
 
   async function fetchMovies() {
     try {
@@ -18,6 +21,8 @@ function Movie() {
       setLoading(false);
       console.log(data);
       setFilm(data);
+      setRating(new Array(Math.floor(parseFloat(data.imdbRating))).fill(0));
+      setExtra(new Array(9 - Math.floor(parseFloat(data.imdbRating))).fill(0));
     } catch (error) {
       console.error("error fetching data:", error);
       setLoading(false);
@@ -27,7 +32,6 @@ function Movie() {
   useEffect(() => {
     fetchMovies();
   }, []);
-
 
   return (
     <>
@@ -75,7 +79,15 @@ function Movie() {
               <li className="movie__text--li">
                 <p className="movie__text--li-para">
                   <span className="bold">IMDB Rating: </span>
-                  <Rating film={film} />
+                  {rating.map((_, index) => (
+                    <FontAwesomeIcon icon="star" key={index} style={{color: "gold"}} />
+                  ))}
+                  {!Number.isInteger(parseFloat(film.imdbRating)) && (
+                    <FontAwesomeIcon icon="star-half-alt" style={{color: "gold", backgroundColor: "gray", overflow: "hidden"}}/>
+                  )}
+                  {extra.map((_, index) => (
+                    <FontAwesomeIcon icon={regular("star")} />
+                  ))}
                 </p>
               </li>
             </ul>
